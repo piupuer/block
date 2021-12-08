@@ -138,6 +138,11 @@ func (et Eth) Wei2Amount() Eth {
 	return et
 }
 
+func (et Eth) BigInt() *big.Int {
+	i, _ := new(big.Int).SetString(et.val, 10)
+	return i
+}
+
 func (et Eth) String() string {
 	return et.val
 }
