@@ -44,26 +44,39 @@ func (et Eth) Gte(s2 Eth) bool {
 
 // Add s + s2
 func (et Eth) Add(s2 Eth) Eth {
-	// add
-	w3 := new(big.Int).Add(et.Amount2Wei().wei, s2.Amount2Wei().wei)
-
-	// new eth
-	s3 := Eth{
-		decimals: et.decimals,
-		val:      w3.String(),
-	}
-	// convert to amount
-	return s3.Wei2Amount()
+	return operation("add", et, s2)
 }
 
 // Sub s - s2
 func (et Eth) Sub(s2 Eth) Eth {
-	// convert to wei
-	w3 := new(big.Int).Sub(et.Amount2Wei().wei, s2.Amount2Wei().wei)
+	return operation("sub", et, s2)
+}
 
+// Mul s * s2
+func (et Eth) Mul(s2 Eth) Eth {
+	return operation("mul", et, s2)
+}
+
+// Div s / s2
+func (et Eth) Div(s2 Eth) Eth {
+	return operation("div", et, s2)
+}
+
+func operation(operator string, s1, s2 Eth) Eth {
+	var w3 *big.Int
+	switch operator {
+	case "add":
+		w3 = new(big.Int).Add(s1.Amount2Wei().wei, s2.Amount2Wei().wei)
+	case "sub":
+		w3 = new(big.Int).Sub(s1.Amount2Wei().wei, s2.Amount2Wei().wei)
+	case "mul":
+		w3 = new(big.Int).Mul(s1.Amount2Wei().wei, s2.Amount2Wei().wei)
+	case "div":
+		w3 = new(big.Int).Div(s1.Amount2Wei().wei, s2.Amount2Wei().wei)
+	}
 	// new eth
 	s3 := Eth{
-		decimals: et.decimals,
+		decimals: s1.decimals,
 		val:      w3.String(),
 	}
 	// convert to amount
