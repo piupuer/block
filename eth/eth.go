@@ -85,7 +85,8 @@ func operation(operator string, s1, s2 Eth) Eth {
 
 // Set amount value
 func (et Eth) Set(amount string) Eth {
-	et.val = fmt.Sprintf("%d", utils.Str2Int64(amount))
+	v, _ := decimal.NewFromString(amount)
+	et.val = v.String()
 	return et
 }
 
