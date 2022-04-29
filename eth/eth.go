@@ -121,7 +121,12 @@ func (et Eth) Amount2Wei() Eth {
 	fracStr := strings.Split(fmt.Sprintf(fmt.Sprintf("%%.%df", et.decimals), f), ".")[1]
 	fracStr += strings.Repeat("0", et.decimals-len(fracStr))
 	fracInt, _ := new(big.Int).SetString(fracStr, 10)
-	wei := new(big.Int).Add(truncInt, fracInt)
+	wei := new(big.Int)
+	if f.Sign() == -1 {
+		wei = new(big.Int).Sub(truncInt, fracInt)
+	} else {
+		wei = new(big.Int).Add(truncInt, fracInt)
+	}
 	et.wei = wei
 	et.val = et.wei.String()
 	return et
